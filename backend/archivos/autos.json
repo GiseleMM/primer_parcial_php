@@ -1,0 +1,14 @@
+[
+    {
+        "patente": "abc777",
+        "marca": "reno",
+        "color": "rojo",
+        "precio": 552900
+    },
+    {
+        "patente": "abc888",
+        "marca": "reno",
+        "color": "rojo",
+        "precio": 52900
+    }
+]

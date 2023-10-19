@@ -1,0 +1,14 @@
+[
+    {
+        "patente": "abc010",
+        "marca": "reno",
+        "color": "verde",
+        "precio": 3000
+    },
+    {
+        "patente": "abc000",
+        "marca": "ford",
+        "color": "verde",
+        "precio": 133000
+    }
+]

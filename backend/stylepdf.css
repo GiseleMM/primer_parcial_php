@@ -1,0 +1,26 @@
+body{
+    background: #c0c0aa;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #1cefff, #c0c0aa);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #1cefff, #c0c0aa); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+h1{
+    text-align: center;
+}
+.tablaPDF{
+    width: 100%;
+    margin: 10px;
+    border-collapse: collapse;
+  border: 2px solid pink;
+  text-align: center;
+}
+th{
+    background-color: pink;
+}
+.tablaPDF th,.tablaPDF td{
+    border: 1px solid pink;
+}
+img{
+    width: 100px;
+    height: 100px;
+}

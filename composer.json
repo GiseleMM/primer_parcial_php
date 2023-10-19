@@ -1,0 +1,7 @@
+{
+    "name": "dell/primer_parcial",
+    "description": "1 parcial prog3",
+    "require": {
+        "mpdf/mpdf": "8.0.10"
+    }
+}

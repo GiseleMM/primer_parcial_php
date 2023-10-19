@@ -1,0 +1,30 @@
+[
+    {
+        "pathFoto": ".\\AA888CC.012512.jpg",
+        "patente": "aaaa",
+        "marca": "bbbb",
+        "color": "rojo",
+        "precio": 1000
+    },
+    {
+        "pathFoto": ".\\AA888CC.012512.jpg",
+        "patente": "aaaa",
+        "marca": "bbbb",
+        "color": "rojo",
+        "precio": 1000
+    },
+    {
+        "pathFoto": ".\\AA888CC.012512.jpg",
+        "patente": "aaaa",
+        "marca": "bbbb",
+        "color": "rojo",
+        "precio": 1000
+    },
+    {
+        "pathFoto": "AA888CC.021025.jpg",
+        "patente": "AA888CC",
+        "marca": "fiat",
+        "color": "blanco",
+        "precio": 100555
+    }
+]
