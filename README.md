@@ -17,15 +17,20 @@ auto.php. Crear, en ./clases, la clase Auto con atributos protegidos:
 * marca(cadena)
 * color(cadena)
 * precio(flotante)
+
+
 Un constructor (que inicialice los atributos), un método de instancia toJSON(), que retornará los datos de la
 instancia (en una cadena con formato JSON).
 Método de instancia guardarJSON($path), que agregará al auto en el path recibido por parámetro. Retornará un
 JSON que contendrá: éxito(bool) y mensaje(string) indicando lo acontecido.
 Método de clase traerJSON($path), que retornará un array de objetos de tipo auto (recuperados del path).
+
 Método de clase verificarAutoJSON($auto), que recorrerá el array obtenido del método traerJSON y retornará un
 JSON que contendrá: existe(bool) y mensaje(string).
-Nota: Si el auto está registrado (comparar por patente), retornará true. Caso contrario, retornará false, y en el
-mensaje se informará de lo acontecido.
+
+*Nota: Si el auto está registrado (comparar por patente), retornará true. Caso contrario, retornará false, y en el
+mensaje se informará de lo acontecido.*
+
 En el directorio raíz del proyecto, agregar las siguientes páginas:
 altaAutoJSON.php: Se recibe por POST la patente, la marca, el color y el precio. Invocar al método guardarJSON y
 pasarle './archivos/autos.json' cómo parámetro.
@@ -35,6 +40,7 @@ verificarAutoJSON).
 listadoAutosJSON.php: (GET) Se mostrará el listado de todos los autos en formato JSON (traerJSON). Pasarle
 './archivos/autos.json' cómo parámetro.autoBD.php. Crear, en ./clases, la clase AutoBD (hereda de Auto) con atributo protegido:
 * pathFoto(cadena)
+
 Un constructor (con parámetros opcionales), un método de instancia toJSON(), que retornará los datos de la
 instancia (en una cadena con formato JSON).
 Crear, en ./clases, la interface IParte1. Esta interface poseerá los métodos:
@@ -47,9 +53,12 @@ de cadena JSON. Se invocará al método agregar.
 Se retornará un JSON que contendrá: éxito(bool) y mensaje(string) indicando lo acontecido.
 listadoAutosBD.php: (GET) Se mostrará el listado completo de los autos (obtenidos de la base de datos) en una
 tabla (HTML con cabecera). Invocar al método traer.
-Nota: Si se recibe el parámetro tabla con el valor mostrar, retornará los datos en una tabla (HTML con cabecera),
+
+*Nota: Si se recibe el parámetro tabla con el valor mostrar, retornará los datos en una tabla (HTML con cabecera),
 preparar la tabla para que muestre la imagen, si es que la tiene.
-Si el parámetro no es pasado o no contiene el valor ‘mostrar’, retornará el array de objetos con formato JSON.
+Si el parámetro no es pasado o no contiene el valor ‘mostrar’, retornará el array de objetos con formato JSON.*
+
+
 
 
 ## Parte 2 (hasta un 6)
@@ -78,9 +87,11 @@ del auto más la nueva ubicación de la foto. La foto se moverá al subdirectori
 nombre formado por la patente punto 'borrado' punto hora, minutos y segundos del borrado (Ejemplo:
 AYF714.renault.borrado.105905.jpg).
 Se retornará un JSON que contendrá: éxito(bool) y mensaje(string) indicando lo acontecido.
+
 verificarAutoBD.php: Se recibe por POST el parámetro obj_auto, que será una cadena JSON (patente), si coincide
 con algún registro de la base de datos (invocar al método traer) retornará los datos del objeto (invocar al toJSON).
 Caso contrario, un JSON vacío ({}).
+
 agregarAutoBD.php: Se recibirán por POST los valores: patente, marca, color, precio y la foto para registrar un
 auto en la base de datos.
 Verificar la previa existencia del auto invocando al método existe. Se le pasará como parámetro el array que
