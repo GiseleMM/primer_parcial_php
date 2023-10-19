@@ -32,11 +32,14 @@ JSON que contendrá: existe(bool) y mensaje(string).
 mensaje se informará de lo acontecido.*
 
 En el directorio raíz del proyecto, agregar las siguientes páginas:
+
 altaAutoJSON.php: Se recibe por POST la patente, la marca, el color y el precio. Invocar al método guardarJSON y
 pasarle './archivos/autos.json' cómo parámetro.
+
 verificarAutoJSON.php: Se recibe por POST la patente.
 Retornar un JSON que contendrá: éxito(bool) y mensaje(string) (agregar el mensaje obtenido del método
 verificarAutoJSON).
+
 listadoAutosJSON.php: (GET) Se mostrará el listado de todos los autos en formato JSON (traerJSON). Pasarle
 './archivos/autos.json' cómo parámetro.autoBD.php. Crear, en ./clases, la clase AutoBD (hereda de Auto) con atributo protegido:
 * pathFoto(cadena)
@@ -48,9 +51,11 @@ Crear, en ./clases, la interface IParte1. Esta interface poseerá los métodos:
 precio, foto), de la base de datos garage_bd. Retorna true, si se pudo agregar, false, caso contrario.
 * traer: este método estático retorna un array de objetos de tipo AutoBD, recuperados de la base de datos.
 Implementar la interfaz en la clase AutoBD.
+
 agregarAutoSinFoto.php: Se recibe por POST el parámetro auto_json (patente, marca, color y precio), en formato
 de cadena JSON. Se invocará al método agregar.
 Se retornará un JSON que contendrá: éxito(bool) y mensaje(string) indicando lo acontecido.
+
 listadoAutosBD.php: (GET) Se mostrará el listado completo de los autos (obtenidos de la base de datos) en una
 tabla (HTML con cabecera). Invocar al método traer.
 
@@ -68,11 +73,13 @@ cómo parámetro. Retorna true, si se pudo eliminar, false, caso contrario.
 * modificar: Modifica en la base de datos el registro coincidente con la instancia actual (comparar por
 patente). Retorna true, si se pudo modificar, false, caso contrario.
 Implementar la interfaz en la clase AutoBD.
+
 eliminarAutoBD.php: Recibe el parámetro auto_json (patente, marca, color y precio, en formato de cadena JSON)
 por POST y se deberá borrar el auto (invocando al método eliminar).
 Si se pudo borrar en la base de datos, invocar al método guardarJSON y pasarle cómo parámetro el valor
 './archivos/autos_eliminados.json'.
 Retornar un JSON que contendrá: éxito(bool) y mensaje(string) indicando lo acontecido.
+
 modificarAutoBD.php: Se recibirán por POST los siguientes valores: auto_json (patente, marca, color y precio, en
 formato de cadena JSON) para modificar un auto en la base de datos. Invocar al método modificar.
 Se retornará un JSON que contendrá: éxito(bool) y mensaje(string) indicando lo acontecido.
@@ -100,12 +107,14 @@ Si el auto ya existe en la base de datos, se retornará un mensaje que indique l
 Si el auto no existe, se invocará al método agregar. La imagen se guardará en “./autos/imagenes/”, con el nombre
 formado por la patente punto hora, minutos y segundos del alta (Ejemplo: AYF714.105905.jpg).
 Se retornará un JSON que contendrá: éxito(bool) y mensaje(string) indicando lo acontecido.
+
 eliminarAutoBDFoto.php: Se recibe el parámetro auto_json (patente, marca, color, precio y pathFoto en formato
 de cadena JSON) por POST. Se deberá borrar el auto (invocando al método eliminar).
 Si se pudo borrar en la base de datos, invocar al método guardarEnArchivo.
 Retornar un JSON que contendrá: éxito(bool) y mensaje(string) indicando lo acontecido.
 Si se invoca por GET (sin parámetros), se mostrarán en una tabla (HTML) la información de todos los autos
 borrados y sus respectivas imágenes.
+
 modificarAutoBDFoto.php: Se recibirán por POST los siguientes valores: auto_json (patente, marca, color y
 precio, en formato de cadena JSON) y la foto (para modificar un auto en la base de datos). Invocar al método
 modificar.
