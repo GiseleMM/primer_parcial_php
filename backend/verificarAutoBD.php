@@ -18,10 +18,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $array_autosBd = AutoBD::traer();
         if ($auto->existe($array_autosBd)) {
 
-            $array = (array_filter($array_autosBd, fn ($item) => $item->patente === $auto->patente));
-            if (count($array) == 1) {
-                echo json_encode($array[0]);
+            foreach ($array_autosBd as $key => $value) {
+                $estandar=json_decode($value->toJSON());
+                if(trim($estandar->patente)==trim($std->patente))
+                {
+                    echo $value->toJSON();
+                    break;
+                }
             }
+            // $array = (array_filter($array_autosBd, fn ($item) => $item->patente === $std->patente));
+            // if (count($array) == 1) {
+            //     //echo json_encode($array[0]);
+            //     echo $array[0]->toJSON();
+            // }
         } else {
             $obj = new stdClass();
             echo json_encode($obj);

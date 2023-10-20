@@ -10,8 +10,6 @@ Se retornará un JSON que contendrá: éxito(bool) y mensaje(string) indicando l
 Si se invoca por GET (sin parámetros), se mostrarán en una tabla (HTML) la información de todos los autos
 modificados y sus respectivas imágenes.
 
-Parte 4 (hasta un 10)
-En el directorio raíz del proyecto, agregar la siguiente página:
  */
 
 use Medina\AutoBD;
@@ -24,19 +22,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $autoBd = new AutoBD($std->patente, $std->marca, $std->color, $std->precio, "");
        
 
-
         $obj = new stdClass();
         $obj->exito = false;
         $obj->mensaje = "modificacion fail";
+
+
         $file = __DIR__;
         $file = str_replace("\\", "/", $file);
-
-
+        //obtengo todos los archivos de fotos
         $archivo = scandir("./autos/fotos/");
         $mover = "";
         var_dump($archivo);
         foreach ($archivo as $key => $value) {
-            if (trim($value) !== "") {
+            if (trim($value) !== "") {//veo el q comienza con la patente 
                 if (str_starts_with(trim($value), $std->patente)) {
                     $mover = trim($value);
                     break;
@@ -44,27 +42,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
        // echo $mover;
-        if (trim($mover) !== "") {
-            echo "ENTRE";
-            $array = explode(".", $mover);
-            $autoBd->set_foto();
-            $destino = "./archivos/autosModificados/$std->patente.$std->marca.modificado." . date("Hms") . "." . end($array);
-            if ($autoBd->Modificar()) {
-                if (copy("./autos/fotos/$mover", $destino)) {
-                    unlink("./autos/fotos/$mover");
-                    $obj->exito = true;
-                    $obj->mensaje = "modificacion exitosa";
-                }
-            }
-        } else {
-            $autoBd->set_foto();
-            if ($autoBd->Modificar())
-            {
+       $autoBd->set_foto(); //seteo foto con la nueva foto y la agregao la carpeta de fotos para q cuando la modifique este ahi
 
+       if ($autoBd->Modificar()) {
+        // si se pudo verificar muevo foto si exite 
+        if (trim($mover) !== "") {
+            $array = explode(".", $mover);//obtengo la ultima parth de la foto en el ultimo elemento del array 
+            $destino = "./archivos/autosModificados/$std->patente.$std->marca.modificado." . date("His") . "." . end($array);
+            if (copy("./autos/fotos/$mover", $destino)) {
+                unlink("./autos/fotos/$mover");
                 $obj->exito = true;
                 $obj->mensaje = "modificacion exitosa";
             }
+        }else
+        {
+            $obj->exito = true;
+            $obj->mensaje = "modificacion exitosa ";
         }
+
+
+       }
+        // if (trim($mover) !== "") {
+        //     echo "ENTRE";
+        //     $array = explode(".", $mover);//obtengo la ultima parth de la foto en el ultimo elemento del array
+           
+        //     $destino = "./archivos/autosModificados/$std->patente.$std->marca.modificado." . date("His") . "." . end($array);
+
+        //     if ($autoBd->Modificar()) {
+        //         //si se pudo eliminar muevo foto a autosModificados y elimino foto vieja 
+        //         if (copy("./autos/fotos/$mover", $destino)) {
+        //             unlink("./autos/fotos/$mover");
+        //             $obj->exito = true;
+        //             $obj->mensaje = "modificacion exitosa";
+        //         }
+        //     }
+        // } else {
+        //    // si no encuentra foto por q no existe la modifico igual 
+        //     if ($autoBd->Modificar())
+        //     {
+
+        //         $obj->exito = true;
+        //         $obj->mensaje = "modificacion exitosa";
+        //     }
+        // }
     }
 
 
@@ -81,31 +101,30 @@ if($_SERVER["REQUEST_METHOD"]=="GET")
             $std=new stdClass();
             $std->patente=$buffer[0];
             $std->marca=$buffer[1];
-            $std->hora=$buffer[3];
+      
+            $hora=str_split($buffer[3],2);
+            $std->hora="$hora[0]-".$hora[1]." -".$hora[2];
             $std->foto=$value;
             array_push($array,$std);
+            
 
         }
         
     }
+    //var_dump($array);die();
     echo grilla($array);
 }
 function grilla($array){
 
    
-    $tabla="<table style='border: 1px solid blue ;background-color:aquamarine; width:50px height:50px '>
+    $tabla="<table style='border:1px solid red'>
     <thead>
         <tr>";
     
-            $tabla.= "<th>PATENTE </th>";
-            
+            $tabla.= "<th>PATENTE </th>";         
             $tabla.= "<th>MARCA</th>";
-            
             $tabla.= "<th>HORA </th>";
-            
             $tabla.= "<th>FOTO  </th>";
-            
-       
     
         $tabla.="
         </tr>
@@ -116,7 +135,7 @@ function grilla($array){
         $tabla.="<td> $value->marca </td>";
         $tabla.="<td> $value->hora </td>";
 
-        $tabla.='<td><img src="./archivos/autosModificados/'.$value->foto.'" alt="foto antigua">  </td>';
+        $tabla.='<td><img src="./archivos/autosModificados/'.$value->foto.'" alt="foto antigua" width="50px" height="50px">  </td>';
         $tabla.="</tr>";
         }
 $tabla.="</tbody>
@@ -124,3 +143,4 @@ $tabla.="</tbody>
 
 return $tabla;
 }
+?>

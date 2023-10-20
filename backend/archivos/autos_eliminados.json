@@ -10,5 +10,11 @@
         "marca": "ford",
         "color": "verde",
         "precio": 133000
+    },
+    {
+        "patente": "cab011",
+        "marca": "reno",
+        "color": "verde",
+        "precio": 3000
     }
 ]

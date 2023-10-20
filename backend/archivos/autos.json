@@ -10,5 +10,11 @@
         "marca": "reno",
         "color": "rojo",
         "precio": 52900
+    },
+    {
+        "patente": "zzz123",
+        "marca": "reno",
+        "color": "rojo",
+        "precio": 52900
     }
 ]

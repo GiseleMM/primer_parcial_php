@@ -29,15 +29,11 @@ if($_SERVER["REQUEST_METHOD"]=="POST")
       if($buffer->existe($array_autosBd))
       {
         $obj->exito=false;
-
         $obj->mensaje="patente existente en base de datos";
       }else
       {
-
-        $extension=pathinfo($_FILES["foto"]["name"],PATHINFO_EXTENSION);
-        $foto=$patente.".".date("Hms").".".$extension;
-        $auto=new AutoBD($patente,$marca,$color,$precio,$foto);
-        $auto->set_foto();
+        $auto=new AutoBD($patente,$marca,$color,$precio,"");
+        $auto->set_foto();// valida foto,  setea path y guarda en el servidor
          if($auto->agregar())
          {
             $obj->exito=true;

@@ -26,5 +26,26 @@
         "marca": "fiat",
         "color": "blanco",
         "precio": 100555
+    },
+    {
+        "patente": "AAE222CC",
+        "marca": "Citroen",
+        "color": "Blanco",
+        "precio": 70000,
+        "pathFoto": ".\\AAE222CC.Citroen.borrado.001027.jpg"
+    },
+    {
+        "patente": "AAE223CC",
+        "marca": "Citroen",
+        "color": "Blanco",
+        "precio": 70000,
+        "pathFoto": "AAE223CC.Citroen.borrado.001006.jpg"
+    },
+    {
+        "patente": "AAE224CC",
+        "marca": "Citroen",
+        "color": "Blanco",
+        "precio": 70000,
+        "pathFoto": "AAE224CC.010300.jpg"
     }
 ]

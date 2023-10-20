@@ -14,8 +14,19 @@ require_once "./clases/autoBD.php";
 if($_SERVER["REQUEST_METHOD"]=="GET")
 {
 $array=AutoBD::traer();
+$array_stdClass=[];
 if(isset($array)){
-    $tabla= grilla($array);
+    foreach ($array as $key => $value) {
+        if(isset($value))
+        {
+            $json=$value->toJSON();
+            $std=json_decode($json);
+            array_push($array_stdClass,$std);
+        }
+      
+    }
+
+    $tabla= grilla($array_stdClass);
     //seteo la zona horaria del servidor 
     date_default_timezone_set("America/Argentina/Buenos_Aires");
 }

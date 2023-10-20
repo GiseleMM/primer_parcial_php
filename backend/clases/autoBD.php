@@ -33,16 +33,12 @@ class AutoBD extends Auto implements IParte1, IParte2, IParte3
 
     //IMPLEMENTACION DE IPARTE3
     /**● existe: retorna true, si la instancia actual está en el array de objetos de tipo AutoBD que recibe como
-parámetro (comparar por patente). Caso contrario retorna false.
-● guardarEnArchivo: escribirá en un archivo de texto (./archivos/autosbd_borrados.txt) toda la información
-del auto más la nueva ubicación de la foto. La foto se moverá al subdirectorio “./autosBorrados/”, con el
-nombre formado por la patente punto 'borrado' punto hora, minutos y segundos del borrado (Ejemplo:
-AYF714.renault.borrado.105905.jpg).
-Se retornará un JSON que contendrá: éxito(bool) y mensaje(string) indicando lo acontecido  */
+parámetro (comparar por patente). Caso contrario retorna false.  */
     public function existe(array $array_autoBd): bool
     {
         $existe = false;
         if (isset($array_autoBd)) {
+            //var_dump($array_autoBd);
             foreach ($array_autoBd as $key => $value) {
                 if ($value->patente === $this->patente) {
                     $existe = true;
@@ -55,55 +51,74 @@ Se retornará un JSON que contendrá: éxito(bool) y mensaje(string) indicando l
     //me sirve en el listado
     public function toJSON(): string
     {
-      $std=new stdClass();
-      $std->patente=$this->patente;
-      $std->marca=$this->marca; 
-      $std->color=$this->color;
-      $std->precio=$this->precio;
-      $std->pathFoto=$this->pathFoto;
-      return  json_encode($std,JSON_PRETTY_PRINT);
+        $std = new stdClass();
+        $std->patente = $this->patente;
+        $std->marca = $this->marca;
+        $std->color = $this->color;
+        $std->precio = $this->precio;
+        $std->pathFoto = $this->pathFoto;
+        return  json_encode($std, JSON_PRETTY_PRINT);
     }
+
+    /**guardarEnArchivo: escribirá en un archivo de texto (./archivos/autosbd_borrados.txt) toda la información
+del auto más la nueva ubicación de la foto. La foto se moverá al subdirectorio “./autosBorrados/”, con el
+nombre formado por la patente punto 'borrado' punto hora, minutos y segundos del borrado (Ejemplo:
+AYF714.renault.borrado.105905.jpg). Se retornará un JSON que contendrá: éxito(bool) y mensaje(string) indicando lo acontecido.*/
     public function guardarEnArchivo(): string
     {
+        //CASO ERROR 
         $obj = new stdClass();
-        $file= dirname(__DIR__);
-        $file=str_replace("\\","/",$file);
+        $obj->exito = false;
+        $obj->mensaje = " NO se pudo guardar en archivo ni mover foto";
 
-        $path_txt = $file."/archivos/autosbd_borrados.txt";
-      //  echo __DIR__ . "/backend/archivos/autosBorrados/";
-      
+
+        //estandarClasss del objeto
+        $estandar=new stdClass();  
+        $estandar->patente = $this->patente;
+        $estandar->marca = $this->marca;
+        $estandar->color = $this->color;
+        $estandar->precio = $this->precio;
+        $estandar->pathFoto = $this->pathFoto;
+
+        $file = dirname(__DIR__);
+        $file = str_replace("\\", "/", $file);
+
+        //ubicacion de los autos borrados
+        $path_txt = $file . "/archivos/autosbd_borrados.txt";
+        //  echo __DIR__ . "/backend/archivos/autosBorrados/";
+
         if (!is_dir(dirname(__DIR__) . "/archivos/autosBorrados/")) {
-            mkdir(dirname(__DIR__). "/archivos/autosBorrados/", 0777, true);
+            mkdir(dirname(__DIR__) . "/archivos/autosBorrados/", 0777, true);
         }
+
+        //ubicacion  de la foto de auto borrado
         $destino = "./archivos/autosBorrados/$this->patente.$this->marca.borrado." . date("Hms") . "." . pathinfo($this->pathFoto, PATHINFO_EXTENSION);
         //echo "DESTINO".$destino."</br>";
-        $buffer=trim($this->pathFoto);
-        $foto_array=explode("/",$buffer);
-       // echo end($foto_array)."</br>";
-        
-        //echo __DIR__."./../archivos/autos/fotos/".end($foto_array)."</br>";
-      
-        if (copy("$file/autos/fotos/".end($foto_array), $destino)) {
+        $buffer = trim($this->pathFoto);
+        $foto_array = explode("/", $buffer);
+        $foto_array = explode("\\",end($foto_array));
+        // echo end($foto_array)."</br>";
 
-           //cambio foto para guardar foto con nueva direccion
-            $this->pathFoto="$this->patente.$this->marca.borrado." . date("Hms") . "." . pathinfo($this->pathFoto, PATHINFO_EXTENSION);
-           
-            unlink("$file/autos/fotos/".end($foto_array));
+
+        //muevo la foto a autosBorrados
+        if (copy("$file/autos/fotos/" . end($foto_array), $destino)) {
+            //borro foto
+            unlink("$file/autos/fotos/" . end($foto_array));
+            //cambio foto del objeto para guardar foto con nueva direccion en archivo .txt
+            $this->pathFoto = "$this->patente.$this->marca.borrado." . date("Hms") . "." . pathinfo($this->pathFoto, PATHINFO_EXTENSION);
+
             $array = array();
             try {
+                //leo el contenido del archivo 
                 $contenido = file_get_contents($path_txt);
-                if ($contenido === false) {
-                    array_push($array, $this);
+                if (!isset($contenido) ) {
+                    array_push($array, $estandar);
                 } else {
 
-                    $buffer = json_decode($contenido);
-
-                    $array = array_map(function ($s) {
-                        $aux = new AutoBD($s->patente, $s->marca, $s->color, $s->precio, $s->pathFoto);
-                        return $aux;
-                    }, $buffer);
-                    array_push($array, $this);
-                    // var_dump($array);
+                    $array=json_decode($contenido);
+                    array_push($array,$estandar);
+                  //  echo "ARRAY DEL ARCHIVO DE BORRADOS";
+                   // var_dump($array);
                 }
 
                 if (file_put_contents($path_txt, json_encode($array, JSON_PRETTY_PRINT))) {
@@ -118,11 +133,6 @@ Se retornará un JSON que contendrá: éxito(bool) y mensaje(string) indicando l
                 $mensaje = $th->getMessage();
                 $obj->mensaje = "Excepcion en guardado en archivo: $mensaje";
             }
-        } else {
-
-            $obj->exito = false;
-
-            $obj->mensaje = " NO se pudo guardar en archivo ni mover foto";
         }
         return json_encode($obj, JSON_PRETTY_PRINT);
     }
@@ -144,7 +154,8 @@ Se retornará un JSON que contendrá: éxito(bool) y mensaje(string) indicando l
             mkdir($destino, 0777, true);
         }
 
-
+        $this->pathFoto = "";// en caso de error no se setea imagen 
+        //VALIDO FOTO
         $tamMax = 100000;
         $aux = isset($_FILES["foto"]) ? $_FILES["foto"] : null;
         if (isset($aux)) {
@@ -161,29 +172,26 @@ Se retornará un JSON que contendrá: éxito(bool) y mensaje(string) indicando l
             if ($aux["size"] > $tamMax) {
                 array_push($errores, "imagen supera los 4000");
             }
+
+            //SI NO HAY ERRORES
             if (count($errores) == 0) {
 
                 $extension = pathinfo($aux["name"], PATHINFO_EXTENSION);
-
                 $archivo = "$this->patente." . date("His") . "." . $extension;
                 $destino .= $archivo;
                 var_dump($aux["tmp_name"]);
                 echo "DESTINO: $destino";
-
+                //muevo y seteo path de foto
                 move_uploaded_file($aux["tmp_name"], $destino);
                 $this->pathFoto = "./$archivo";
-            } else {
-
-                var_dump($errores);
-                $this->pathFoto = "";
             }
+  
         }
     }
 
 
-    /*Agregar (de instancia): agrega, a partir de la instancia actual, un nuevo registro en la tabla empleados
-(id,patente, marca, color, precio, foto y sueldo), de la base de datos usuarios_test. Retorna true, si se pudo
-agregar, false, caso contrario. */
+    /*agregar: agrega, a partir de la instancia actual, un nuevo registro en la tabla autos (patente, marca, color,
+precio, foto), de la base de datos garage_bd. Retorna true, si se pudo agregar, false, caso contrario. */
     public function agregar(): bool
     {
         $agregado = false;
@@ -247,7 +255,7 @@ cómo parámetro. Retorna true, si se pudo eliminar, false, caso contrario.*/
     {
         $eliminado = false;
         if (isset($patente)) {
-          //  echo "entrea eliminar";
+            //  echo "entrea eliminar";
             try {
                 $pdo = new PDO("mysql:host=localhost;dbname=garage_bd", "root", "");
                 $sql = $pdo->prepare("DELETE FROM autos WHERE patente=:patente;");
